@@ -1,0 +1,141 @@
+import customtkinter as ctk
+
+root = ctk.CTk()
+root.title("Login")
+root.geometry("400x400")
+
+#class to store login
+class Login:
+    def __init__(self,userV,passV):
+        self.userV = userV
+        self.passV = passV
+    def getPassword(self):
+        return self.passV
+    def getUsername(self):
+        return self.userV
+    def print(self):
+        print("Username: " + str(self.userV) + " - Password: " + str(self.passV))
+    def checkString(self):
+        return str(self.userV) + str(self.passV)
+
+#List of saved logins with a sample
+login2 = Login("Username","1234")
+saved = [login2]
+
+#methods to retrieve current info
+def getPassText():
+    text = password.get()
+    return(f"{text}")
+def getUseText():
+    text = username.get()
+    return(f"{text}")
+
+#function tied to submit button, checks input against stored logins
+def submit():
+    #save the inputted login
+    login1 = Login(getUseText(),getPassText())
+
+    #check it against saved logins
+    for save in saved:
+        if(save.checkString() == login1.checkString()):
+            enter.configure(text="Login Succesful!")
+        else:
+            enter.configure(text="Login Unsuccesful! \nPlease check your login is correct")
+
+#Clears current space and allows for a password reset email to be sent
+def reset():
+    for widget in root.winfo_children():
+        widget.place_forget()
+        widget.pack_forget()
+    enter1 = ctk.CTkLabel(root,text = "Enter your account's email \nfor a password reset",font=("Arial",26))
+    enter1.pack(pady=50)
+
+    username1 = ctk.CTkEntry(root)
+    username1.place(x=140,y=150)
+
+    userL1 = ctk.CTkLabel(root,text = "Email:",font=("Arial",12))
+    userL1.place(x=75,y=150)
+    submit1 = ctk.CTkButton(root,text="Send",command = registered)
+    submit1.place(x=130,y=240)
+    enter.configure(text="Password Reset Email Sent")
+
+#Resets the space to the normal after either or reset or registry
+def registered():
+    for widget in root.winfo_children():
+        widget.place_forget()
+        widget.pack_forget()
+    
+    enter.pack(pady=50)
+    username.place(x=140,y=150)
+    password.place(x=140,y=190)
+    userL.place(x=75,y=150)
+    passL.place(x=75,y=190)
+    submit.place(x=130,y=240)
+    checkbox.place(x=140,y=280)
+    forgot.place(x=130,y=320)
+    register.place(x=130,y=350)
+
+#space to make new credentials
+def register():
+    for widget in root.winfo_children():
+        widget.place_forget()
+        widget.pack_forget()
+    enter2 = ctk.CTkLabel(root,text = "Enter your new credentials",font=("Arial",26))
+    enter2.pack(pady=50)
+
+    username2.delete(0,100)
+    password2.delete(0,100)
+    username2.place(x=140,y=150)
+    password2.place(x=140,y=190)
+
+    userL2 = ctk.CTkLabel(root,text = "Username:",font=("Arial",12))
+    userL2.place(x=75,y=150)
+    passL2 = ctk.CTkLabel(root,text = "Password:",font=("Arial",12))
+    passL2.place(x=75,y=190)
+
+    submit2= ctk.CTkButton(root,text="Submit",command = create)
+    submit2.place(x=130,y=240)
+    
+    #Adds new login to saved
+def create():
+    nUser = username2.get()
+    nPass = password2.get()
+    login2 = Login((f"{nUser}"),(f"{nPass}"))
+    saved.append(login2)
+    enter.configure(text="New credentials \nsuccessfully created")
+    registered()
+
+
+username2 = ctk.CTkEntry(root)
+password2 = ctk.CTkEntry(root)
+
+
+
+enter = ctk.CTkLabel(root,text = "Enter your credentials",font=("Arial",26))
+enter.pack(pady=50)
+
+username = ctk.CTkEntry(root)
+username.place(x=140,y=150)
+
+password = ctk.CTkEntry(root)
+password.place(x=140,y=190)
+
+userL = ctk.CTkLabel(root,text = "Username:",font=("Arial",12))
+userL.place(x=75,y=150)
+passL = ctk.CTkLabel(root,text = "Password:",font=("Arial",12))
+passL.place(x=75,y=190)
+
+submit = ctk.CTkButton(root,text="Submit",command = submit)
+submit.place(x=130,y=240)
+
+check_var = ctk.StringVar(value="off")
+checkbox = ctk.CTkCheckBox(root, text="Remember me",variable=check_var, onvalue="on", offvalue="off")
+checkbox.place(x=140,y=280)
+
+forgot = ctk.CTkButton(root,text="Forgot Password?",command=reset,fg_color="Grey")
+forgot.place(x=130,y=320)
+
+register = ctk.CTkButton(root,text="Register",command=register,fg_color="Grey")
+register.place(x=130,y=350)
+
+root.mainloop()
